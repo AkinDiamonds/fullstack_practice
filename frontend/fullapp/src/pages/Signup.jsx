@@ -1,38 +1,33 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
-function Signup() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+function Signup(){
+  const [name, setName]= useState("")
+  const [email, setEmail]= useState("")
+  const [password, setPassword]= useState("")
+  const navigate = useNavigate()
 
-  async function handleSignup(e) {
-    e.preventDefault();
-    const res = await fetch("http://127.0.0.1:8000/user/signup", {
+
+  async function handleSignUp(e) {
+    e.preventdefault()
+    const res = await fetch("http://127.0.0.1:8000/user/signup",{
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({name, email, password}),
     });
-
-    if (res.ok) {
-      alert("Signup successful");
-      navigate("/");
-    } else {
-      alert("Signup failed");
-    }
+    if (res.ok){
+      alert('SignUp succesfull')
+      navigate('/')
+    }else {alert('Signup Failed')}
   }
 
   return (
-    <form onSubmit={handleSignup}>
-      <h2>Signup</h2>
-      <input placeholder="Name" onChange={(e) => setName(e.target.value)} />
-      <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-      <button type="submit">Signup</button>
+    <form onSubmit={handleSignUp}>
+      <input  onChange={(e) => setName(e.target.value)} />
+      <input onChange={(e) => setEmail (e.target.value)} />
+      <input onchange={(e) => setPassword(e.target.value)}/>
+      <button type="submit"> Signup </button>
     </form>
-  );
+  )
 }
-
-
 export default Signup
