@@ -1,0 +1,96 @@
+.dashboard-container {
+  max-width: 700px;
+  margin: 50px auto;
+  background: #181a21;
+  padding: 30px;
+  border-radius: 12px;
+  color: #f1f5fa;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.task-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.task-form input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #22252e;
+  color: white;
+}
+
+.task-form button {
+  background: #4e9eff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.task-form button:hover {
+  background: #338fff;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  background: #1c1e25;
+  padding: 12px 20px;
+  border-radius: 8px;
+}
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.task-item {
+  background: #1c1e25;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.task-info h3 {
+  margin: 0;
+}
+
+.actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #f1f5fa;
+  margin-left: 8px;
+}
+
+.actions button:hover {
+  color: #4e9eff;
+}
+
+.empty {
+  text-align: center;
+  color: gray;
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .task-form {
+    flex-direction: column;
+  }
+}
