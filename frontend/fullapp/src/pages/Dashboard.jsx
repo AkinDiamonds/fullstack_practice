@@ -1,100 +1,90 @@
-import { useState } from "react";
-import "./Dashboard.css";
+import { useState, useEffect } from "react";
+import "./Dashboard.css"
 
-function Dashboard() {
+export default function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [editId, setEditId] = useState(null);
 
-//  add and update
-  const handleSubmit = (e) => {
+  // fetch tasks
+  async function getTasks() {
+    const res = await fetch("http://127.0.0.1:8000/tasks/");
+    const data = await res.json();
+    setTasks(data);
+  }
+
+  useEffect(() => {
+    getTasks();
+  }, []);
+
+  // create or update task
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    if (!title || !description) {
-      alert("Please fill out all fields");
-      return;
-    }
+    const method = editId ? "PUT" : "POST";
+    const url = editId
+      ? `http://127.0.0.1:8000/tasks/${editId}`
+      : "http://127.0.0.1:8000/tasks/";
 
-    if (editId !== null) {
-      setTasks(
-        tasks.map((task) =>
-          task.id === editId ? { ...task, title, description } : task
-        )
-      );
-      setEditId(null);
-    } else {
-      const newTask = {
-        id: Date.now(),
-        title,
-        description,
-      };
-      setTasks([...tasks, newTask]);
-    }
+    await fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, description }),
+    });
 
     setTitle("");
     setDescription("");
-  };
+    setEditId(null);
+    getTasks();
+  }
 
-  // edittask
-  const handleEdit = (task) => {
+  // delete task
+  async function deleteTask(id) {
+    await fetch(`http://127.0.0.1:8000/tasks/${id}`, { method: "DELETE" });
+    getTasks();
+  }
+
+  // edit task
+  function startEdit(task) {
     setEditId(task.id);
     setTitle(task.title);
     setDescription(task.description);
-  };
-
-  // delete task
-  const handleDelete = (id) => {
-    setTasks(tasks.filter((task) => task.id !== id));
-  };
-
-  // stats
-  const totalTasks = tasks.length;
+  }
 
   return (
-    <div className="dashboard-container">
+    <div >
       <h1>Dashboard</h1>
-
-      <form className="task-form" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <input
-          type="text"
-          placeholder="Task title..."
+          placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <input
-          type="text"
-          placeholder="Task description..."
+          placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <button type="submit">{editId ? "Update" : "Add Task"}</button>
+        <button type="submit">{editId ? "Update" : "Add"}</button>
       </form>
 
-      <div className="stats">
-        <p>Total Tasks: {totalTasks}</p>
-      </div>
-
-      <div className="task-list">
-        {tasks.length === 0 ? (
-          <p className="empty">No tasks yet. Add one.</p>
-        ) : (
-          tasks.map((task) => (
-            <div key={task.id} className="task-item">
-              <div className="task-info">
-                <h3>{task.title}</h3>
-                <p>{task.description}</p>
-              </div>
-              <div className="actions">
-                <button onClick={() => handleEdit(task)}>Edit</button>
-                <button onClick={() => handleDelete(task.id)}>Delete</button>
-              </div>
+      <ul>
+        {tasks.map((t) => (
+          <li
+            key={t.id}
+          >
+            <div>
+              <strong>{t.title}</strong>
+              <p>{t.description}</p>
             </div>
-          ))
-        )}
-      </div>
+            <div>
+              <button onClick={() => startEdit(t)}>Edit</button>
+              <button onClick={() => deleteTask(t.id)}>Delet</button>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
-
-export default Dashboard;

@@ -10,7 +10,7 @@ function Signup(){
 
   async function handleSignUp(e) {
     e.preventdefault()
-    const res = await fetch("http://127.0.0.1:8000/user/signup",{
+    const res = await fetch("http://127.0.0.1:8000/user/signup", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({name, email, password}),
@@ -23,9 +23,9 @@ function Signup(){
 
   return (
     <form onSubmit={handleSignUp}>
-      <input  onChange={(e) => setName(e.target.value)} />
-      <input onChange={(e) => setEmail (e.target.value)} />
-      <input onchange={(e) => setPassword(e.target.value)}/>
+      <input type="text" placeholder="Name" onChange={(e) => setName(e.target.value)} />
+      <input type="email" placeholder="email" onChange={(e) => setEmail (e.target.value)} />
+      <input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)}/>
       <button type="submit"> Signup </button>
     </form>
   )

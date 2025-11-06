@@ -21,17 +21,25 @@ function Login() {
     console.log(res.ok)
 
     if(res.ok){
-      alert("You have found yourself in the dashboard")
+      console.log("You have found yourself in the dashboard")
       navigate('/dashboard')
     }else {alert("Something went wrong!")}
   }
 
+  function gotosignup() {
+    navigate("/signup")
+  }
+
   return(
-    <form onSubmit={handleLogin}>
-      <input type="email" placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} />
-      <input type="text" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} />
-      <button type="submit">Log in</button>
-    </form>
+    <>
+      <form onSubmit={handleLogin}>
+        <input type="email" placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} />
+        <input type="text" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} />
+        <button type="submit">Log in</button>
+      </form>
+
+      <button onClick={gotosignup}>Sign up instead</button>
+    </>
   )
 }
 
