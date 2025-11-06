@@ -80,7 +80,7 @@ export default function Dashboard() {
             </div>
             <div>
               <button onClick={() => startEdit(t)}>Edit</button>
-              <button onClick={() => deleteTask(t.id)}>Delet</button>
+              <button onClick={() => deleteTask(t.id)}>Delete</button>
             </div>
           </li>
         ))}
