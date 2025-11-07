@@ -18,18 +18,28 @@ class UserResponse(BaseModel):
         from_attributes = True
 
 
-class TaskBase(BaseModel):
-    title: str
-    description: str
-
-class TaskCreate(TaskBase):
-    pass
-
-class TaskResponse(BaseModel):
+class Records(BaseModel):
     id: int
-    user_id: int
-    title: str
-    description: str
+    name: str
+    gender: str
+    date_of_birth: str
+    occupation: str
+    state_of_origin: str
 
     class Config:
         from_attributes = True
+# class TaskBase(BaseModel):
+#     title: str
+#     description: str
+
+# class TaskCreate(TaskBase):
+#     pass
+
+# class TaskResponse(BaseModel):
+#     id: int
+#     user_id: int
+#     title: str
+#     description: str
+
+#     class Config:
+#         from_attributes = True

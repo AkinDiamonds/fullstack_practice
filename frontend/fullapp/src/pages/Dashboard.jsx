@@ -1,90 +1,73 @@
-import { useState, useEffect } from "react";
-import "./Dashboard.css"
+import React, { useEffect, useState } from "react";
 
-export default function Dashboard() {
-  const [tasks, setTasks] = useState([]);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [editId, setEditId] = useState(null);
-
-  // fetch tasks
-  async function getTasks() {
-    const res = await fetch("http://127.0.0.1:8000/tasks/");
-    const data = await res.json();
-    setTasks(data);
-  }
+const RecordTable = () => {
+  const [records, setRecords] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    getTasks();
+    const fetchRecords = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/records");
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+        const data = await response.json();
+        setRecords(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRecords();
   }, []);
 
-  // create or update task
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-    const method = editId ? "PUT" : "POST";
-    const url = editId
-      ? `http://127.0.0.1:8000/tasks/${editId}`
-      : "http://127.0.0.1:8000/tasks/";
-
-    await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, description }),
-    });
-
-    setTitle("");
-    setDescription("");
-    setEditId(null);
-    getTasks();
-  }
-
-  // delete task
-  async function deleteTask(id) {
-    await fetch(`http://127.0.0.1:8000/tasks/${id}`, { method: "DELETE" });
-    getTasks();
-  }
-
-  // edit task
-  function startEdit(task) {
-    setEditId(task.id);
-    setTitle(task.title);
-    setDescription(task.description);
-  }
+  if (loading) return <p>Loading records...</p>;
+  if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
 
   return (
-    <div >
-      <h1>Dashboard</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <button type="submit">{editId ? "Update" : "Add"}</button>
-      </form>
-
-      <ul>
-        {tasks.map((t) => (
-          <li
-            key={t.id}
-          >
-            <div>
-              <strong>{t.title}</strong>
-              <p>{t.description}</p>
-            </div>
-            <div>
-              <button onClick={() => startEdit(t)}>Edit</button>
-              <button onClick={() => deleteTask(t.id)}>Delete</button>
-            </div>
-          </li>
-        ))}
-      </ul>
+    <div style={{ padding: "20px" }}>
+      <h2>User Records</h2>
+      <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "10px" }}>
+        <thead>
+          <tr style={{ backgroundColor: "#f2f2f2" }}>
+            <th style={thStyle}>#</th>
+            <th style={thStyle}>Name</th>
+            <th style={thStyle}>Gender</th>
+            <th style={thStyle}>Date of Birth</th>
+            <th style={thStyle}>Occupation</th>
+            <th style={thStyle}>State of Origin</th>
+          </tr>
+        </thead>
+        <tbody>
+          {records.map((rec, index) => (
+            <tr key={rec.id || index}>
+              <td style={tdStyle}>{index + 1}</td>
+              <td style={tdStyle}>{rec.name}</td>
+              <td style={tdStyle}>{rec.gender}</td>
+              <td style={tdStyle}>{rec.date_of_birth}</td>
+              <td style={tdStyle}>{rec.occupation}</td>
+              <td style={tdStyle}>{rec.state_of_origin}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-}
+};
+
+const thStyle = {
+  border: "1px solid #ddd",
+  padding: "8px",
+  textAlign: "left",
+  fontWeight: "bold",
+};
+
+const tdStyle = {
+  border: "1px solid #ddd",
+  padding: "8px",
+};
+
+export default RecordTable;

@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String
+# from sqlalchemy.orm import relationship
 from database import Base
 
 class User(Base):
@@ -9,13 +9,15 @@ class User(Base):
     email = Column(String(100), unique=True)
     password = Column(String(200))
 
-    tasks = relationship("Task", back_populates= "owner")
+    # tasks = relationship("Task", back_populates= "owner")
 
-class Task(Base):
-    __tablename__ ="tasks"
+class Record(Base):
+    __tablename__ ="records"
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String(100))
-    description = Column(String(300))
-    owner_id = Column(Integer, ForeignKey("users.id"))
+    name = Column(String(100))
+    gender = Column(String(100))
+    date_of_birth = Column(String(100))
+    occupation = Column(String(100))
+    state_of_origin = Column(String(100))
 
-    owner = relationship("User", back_populates= "tasks")
+    # owner = relationship("User", back_populates= "tasks")
